@@ -1,4 +1,6 @@
 function [Q,R] = qrupdate_rank_1(Qin,Rin, u,v)
+% [Q,R] = qrupdate_rank_1(Qin,Rin, u,v)
+%
 % ---------------------------------------
 % update QR factorization
 % A = Qin * Rin

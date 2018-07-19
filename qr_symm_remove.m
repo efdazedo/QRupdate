@@ -1,4 +1,5 @@
 function [Q,R] =  qr_symm_remove( k, Qin, Rin, Arow_k, Acol_k )
+% [Q,R] =  qr_symm_remove( k, Qin, Rin, [Arow_k, Acol_k ])
 %
 %  Essentially remove the k-th row and k-th column by
 %  zeroing out row    A(:,k) = 0, 
