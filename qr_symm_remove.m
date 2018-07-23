@@ -55,7 +55,12 @@ v = Arow_k(:);
 % second rank-1 update
 % --------------------
 u2 = -Acol_k ;
-u2 = u2 + (Akk+1)*ek;
+
+% --------------------
+% u2 = u2 + (Akk+1)*ek;
+% --------------------
+u2(k) = 1;
+
 v2 = ek;
 [Q,R] = qrupdate_rank_1( Qin2, Rin2, u2, v2 );
 
