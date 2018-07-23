@@ -48,7 +48,8 @@ Akk = Acol_k(k);
 % first rank-1 update
 % -------------------
 u = -ek; 
-v = Arow_k(:);
+v = Arow_k(:)';
+v = reshape(v, numel(v),1);
 
 % -------------
 % Note save some work by

@@ -80,7 +80,18 @@ for j=1:k,
     % ---------------------
     sa = R(j,j);
     sb = R(kp1,j);
-    [c,s] = srotg( sa, sb );
+
+    is_real = ((imag(sa) == 0) && (imag(sb) == 0));
+    if (is_real),
+      [c,s] = srotg( sa, sb );
+      G = [c, -s; ...
+           s,  c];
+    else
+      [c,s] = zrotg( sa, sb);
+      G = [c,       -s; ...
+           conj(s), c];
+    end;
+ 
     % ---------------------
     % apply Givens rotation
     % ---------------------
@@ -93,33 +104,33 @@ for j=1:k,
     if (use_vec),
       r1(j:kp1) = R(j,  j:kp1);
       r2(j:kp1) = R(kp1,j:kp1);
-      R(j,  j:kp1) =   c  * r1(j:kp1) - s * r2(j:kp1);
-      R(kp1,j:kp1) =   s  * r1(j:kp1) + c * r2(j:kp1);
+      R(j,  j:kp1) =   G(1,1)  * r1(j:kp1) + G(1,2) * r2(j:kp1);
+      R(kp1,j:kp1) =   G(2,1)  * r1(j:kp1) + G(2,2) * r2(j:kp1);
     else
       for i=j:kp1,
           r_j_i   = R(j,i);
           r_kp1_i = R(kp1,i);
-          R(j,  i) = c * r_j_i - s * r_kp1_i;
-          R(kp1,i) = s * r_j_i + c * r_kp1_i;
+          R(j,  i) = G(1,1) * r_j_i + G(1,2) * r_kp1_i;
+          R(kp1,i) = G(2,1) * r_j_i + G(2,2) * r_kp1_i;
       end;
     end;
 
     % -----------------------------------------
     % transpose of Givens apply to columns of Q
-    % [q1 q2] * [  c  s]
-    %           [ -s  c]
+    % [q1 q2] * Gt,   where Gt = G'
     % -----------------------------------------
+    Gt = G';
     if (use_vec),
       q1(1:kp1) = Q(1:kp1,j);
       q2(1:kp1) = Q(1:kp1,kp1);
-      Q(1:kp1,  j) = q1(1:kp1) * c + q2(1:kp1) * (-s);
-      Q(1:kp1,kp1) = q1(1:kp1) * s + q2(1:kp1) * c;
+      Q(1:kp1,  j) = q1(1:kp1) * Gt(1,1) + q2(1:kp1) * Gt(2,1);
+      Q(1:kp1,kp1) = q1(1:kp1) * Gt(1,2) + q2(1:kp1) * Gt(2,2);
     else
       for i=1:kp1,
         q_i_j    = Q(i,j);
         q_i_kp1  = Q(i,kp1);
-        Q(i,j)   = q_i_j * c + q_i_kp1 * (-s);
-        Q(i,kp1) = q_i_j * s + q_i_kp1 * c;
+        Q(i,j)   = q_i_j * Gt(1,1) + q_i_kp1 * Gt(2,1);
+        Q(i,kp1) = q_i_j * Gt(1,2) + q_i_kp1 * Gt(2,2);
       end;
     end;
 

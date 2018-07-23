@@ -1,9 +1,15 @@
 % --------------------------------------
 % simple script to test qr_symm_remove()
 % --------------------------------------
-n = 5;
+n = 10;
 m = n;
 A = rand(n,m);
+
+use_complex = 1;
+if (use_complex),
+  A = A + rand(n,m)*sqrt(-1);
+end;
+
 [Qin,Rin] = qr(A);
 k = 3;
 

@@ -1,7 +1,12 @@
 % simple test of qrupdate_rc
 %
+use_complex = 1;
+
 n = 10;
 A = rand(n,n);
+if (use_complex),
+  A = A + rand(n,n)*sqrt(-1);
+end;
 
 % -----------------------------------
 % create QR factorization by adding one row and one column 

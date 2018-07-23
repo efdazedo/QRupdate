@@ -9,6 +9,12 @@
 n = 10;
 m = 10;
 A = rand(n,m);
+
+use_complex = 1;
+if (use_complex),
+  A = A + rand(n,m)*sqrt(-1);
+end;
+
 [Qin,Rin] = qr(A);
 u = rand(n,1);
 v = rand(m,1);

@@ -77,15 +77,24 @@ for k=(nw-1):-1:1,
   end;
 
 
-  [c,s] = srotg(sa,sb);
-  G = [c, -s;  ...
-       s, c];
+  is_real = (imag(sa) == 0) && (imag(sb) == 0);
+  if (is_real),
+     [c,s] = srotg(sa,sb);
+     G = [c, -s;  ...
+          s, c];
+  else
+     [c,s] = zrotg(sa,sb);
+     G = [c,       -s;  ...
+          conj(s), c];
+  end;
+
 
   % ----------
   % apply to w
   % ----------
   w(k) = c*sa + (-s)*sb;
   w(k+1) = 0;
+
 
   % ------------------------
   % apply to R(:(k+1), k:m)
@@ -121,9 +130,16 @@ for k=1:ncols_R,
      continue;
   end;
 
-  [c,s] = srotg( sa, sb);
-  G = [c,  -s; ...
-       s,   c];
+  is_real = (imag(sa) == 0) && (imag(sb) == 0);
+  if (is_real),
+    [c,s] = srotg( sa, sb);
+    G = [c,  -s; ...
+         s,   c];
+  else
+    [c,s] = zrotg( sa, sb);
+    G = [c,        -s; ...
+         conj(s),   c];
+  end;
 
   % ------------------------
   % apply to R(k:(k+1), k:n)
