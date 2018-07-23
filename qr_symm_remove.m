@@ -49,7 +49,17 @@ Akk = Acol_k(k);
 % -------------------
 u = -ek; 
 v = Arow_k(:);
-[Qin2,Rin2] = qrupdate_rank_1( Qin, Rin, u, v );
+
+% -------------
+% Note save some work by
+% w_in = Qin'*u 
+%      = Qin'*(-ek) 
+%      = -Qin'*ek 
+%      = -Qin(k,:)';
+% -------------
+w_in = -Qin(k,:)';
+
+[Qin2,Rin2] = qrupdate_rank_1( Qin, Rin, u, v, w_in );
 
 % --------------------
 % second rank-1 update

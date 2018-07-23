@@ -1,15 +1,22 @@
-function [Q,R] = qrupdate_rank_1(Qin,Rin, u,v)
-% [Q,R] = qrupdate_rank_1(Qin,Rin, u,v)
+function [Q,R] = qrupdate_rank_1(Qin,Rin, u,v, w_in)
+% [Q,R] = qrupdate_rank_1(Qin,Rin, u,v [, w_in])
 %
 % ---------------------------------------
 % update QR factorization
 % A = Qin * Rin
 % Q * R = (A + u * v')
 %
+% option to pass in 
+% w_in = Q'*u   
+%
 % algorithm from section 12.5
 % in book "Matrix Computations" by Golub and Van Lan
+%
 % ---------------------------------------
 idebug = 0;
+
+has_w_in = (nargin > 4);
+
 
 % ------------------------------------------
 % note reuse storage of Qin, Rin  in C code
@@ -38,7 +45,11 @@ end;
 % -------------------------------------------
 % Let A + u*v' = Q*(R + w*v'), where w = Q'*w
 % -------------------------------------------
-w = Q'*u;
+if (has_w_in),
+  w = w_in;
+else
+  w = Q'*u;
+end;
 
 % ----------------------------------------------------------- 
 % Our goal is to apply Given's rotations to make w = norm(w) * e1
